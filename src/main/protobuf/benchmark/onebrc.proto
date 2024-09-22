@@ -1,0 +1,12 @@
+syntax="proto3";
+package benchmark.proto;
+
+message OneBrcProtoRecord {
+  string city = 1;
+  int32 temperature = 2;
+}
+
+message OneBrcProtoRecordOrdinalCity {
+  int32 city = 1;
+  float temperature = 2;
+}

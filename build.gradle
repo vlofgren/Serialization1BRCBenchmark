@@ -1,0 +1,66 @@
+plugins {
+    id 'java'
+
+    id "com.google.protobuf" version "0.9.4"
+}
+
+group = 'benchmark'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+
+    maven { url "https://artifacts.marginalia.nu/snapshots" }
+    exclusiveContent {
+        forRepository {
+            maven {
+                url = uri("https://artifacts.marginalia.nu/snapshots")
+            }
+        }
+        filter {
+            // Only use the Marginalia snapshot repository for the `slop` library
+            includeModule("nu.marginalia", "slop")
+        }
+    }
+}
+
+dependencies {
+    // parquet
+    implementation 'blue.strategic.parquet:parquet-floor:1.36'
+
+    // protobuf
+    implementation 'com.google.protobuf:protobuf-java:3.16.3'
+
+    // fury
+    implementation 'org.apache.fury:fury-core:0.7.1'
+
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'org.slf4j:slf4j-simple:1.7.30'
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+protobuf {
+    protoc {
+        if (osdetector.os == "osx") {
+            artifact = "com.google.protobuf:protoc:3.0.2:osx-x86_64"
+        } else {
+            artifact = "com.google.protobuf:protoc:3.0.2"
+        }
+    }
+}
+
+tasks.compileJava.dependsOn('generateProto')
+
+sourceSets {
+    main {
+        proto {
+            srcDirs += 'src/main/protobuf'
+        }
+    }
+}
