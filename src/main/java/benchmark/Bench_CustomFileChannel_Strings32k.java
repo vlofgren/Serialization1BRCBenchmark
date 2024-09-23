@@ -2,7 +2,7 @@ package benchmark;
 
 import com.google.common.testing.GcFinalization;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
@@ -11,8 +11,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Bench_CustomFileChannel_Strings extends Benchmark {
-    public Bench_CustomFileChannel_Strings() throws IOException {
+public class Bench_CustomFileChannel_Strings32k extends Benchmark {
+    public Bench_CustomFileChannel_Strings32k() throws IOException {
         super(BenchmarkParameters.itemCount);;
     }
 
@@ -20,7 +20,7 @@ public class Bench_CustomFileChannel_Strings extends Benchmark {
     protected int runBenchmark(int iters) throws IOException {
         Path tempFile = Files.createTempFile(tempDir, "cities", ".bin");
 
-        ByteBuffer buffer = ByteBuffer.allocate(4096);
+        ByteBuffer buffer = ByteBuffer.allocate(32*1024);
         long writeStart = System.currentTimeMillis();
 
 

@@ -8,10 +8,14 @@ import java.util.Map;
 public class Main {
     public static void main(String... args) throws Exception {
         List<Benchmark> benchmarks = List.of(
+                new Bench_Duckdb_JDBC_Ordinal(),
+                new Bench_Duckdb_JDBC_String(),
                 new Bench_Fury_String(),
                 new Bench_Fury_Ordinal(),
-                new Bench_CustomFileChannel_Strings(),
-                new Bench_CustomFileChannel_Ordinal(),
+                new Bench_CustomFileChannel_Strings4k(),
+                new Bench_CustomFileChannel_Ordinal4k(),
+                new Bench_CustomFileChannel_Strings32k(),
+                new Bench_CustomFileChannel_Ordinal32k(),
                 new Bench_ObjectInputStream(),
                 new Bench_DataInputStream_Columnar(),
                 new Bench_DataInputStream_Interleaved(),
