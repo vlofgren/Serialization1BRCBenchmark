@@ -1,14 +1,13 @@
 package benchmark;
 
 import blue.strategic.parquet.*;
+import com.google.common.testing.GcFinalization;
 import org.apache.parquet.schema.MessageType;
 import org.apache.parquet.schema.Types;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.apache.parquet.schema.LogicalTypeAnnotation.stringType;
@@ -17,7 +16,7 @@ import static org.apache.parquet.schema.PrimitiveType.PrimitiveTypeName.INT32;
 
 class Bench_Parquet extends Benchmark {
     public Bench_Parquet() throws IOException {
-        super(10_000_000);
+        super(BenchmarkParameters.itemCount);;
     }
 
     @Override
@@ -45,6 +44,7 @@ class Bench_Parquet extends Benchmark {
 
         long bestReadTime = Integer.MAX_VALUE;
         for (int iter = 0; iter < iters; iter++) {
+            GcFinalization.awaitFullGc();
             long readStart = System.currentTimeMillis();
 
             try (var stream = ParquetReader.streamContent(file.toFile(),

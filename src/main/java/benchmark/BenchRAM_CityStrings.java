@@ -1,12 +1,14 @@
 package benchmark;
 
+import com.google.common.testing.GcFinalization;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 class BenchRAM_CityStrings extends Benchmark {
     public BenchRAM_CityStrings() throws IOException {
-        super(10_000_000);
+        super(BenchmarkParameters.itemCount);;
     }
 
     protected int runBenchmark(int iters) throws IOException {
@@ -23,6 +25,8 @@ class BenchRAM_CityStrings extends Benchmark {
 
 
         for (int iter = 0; iter < iters; iter++) {
+            GcFinalization.awaitFullGc();
+
             long startTime = System.currentTimeMillis();
             Map<String, ResultsObserver> observerMap = new HashMap<>();
 

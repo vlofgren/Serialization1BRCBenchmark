@@ -1,6 +1,7 @@
 package benchmark;
 
 import benchmark.proto.Onebrc;
+import com.google.common.testing.GcFinalization;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -11,7 +12,7 @@ import java.util.Arrays;
 
 class Bench_Protobuf_InputStream_Ordinal extends Benchmark {
     public Bench_Protobuf_InputStream_Ordinal() throws IOException {
-        super(10_000_000);
+        super(BenchmarkParameters.itemCount);;
     }
 
     @Override
@@ -36,6 +37,8 @@ class Bench_Protobuf_InputStream_Ordinal extends Benchmark {
 
         // read in a loop to let the VM and caches warm up
         for (int iter = 0; iter < 3; iter++) {
+            GcFinalization.awaitFullGc();
+
             long readStart = System.currentTimeMillis();
 
             ResultsObserver[] stats = new ResultsObserver[citiesAll.size()];

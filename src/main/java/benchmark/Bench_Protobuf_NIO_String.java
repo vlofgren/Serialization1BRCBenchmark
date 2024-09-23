@@ -1,6 +1,7 @@
 package benchmark;
 
 import benchmark.proto.Onebrc;
+import com.google.common.testing.GcFinalization;
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.CodedOutputStream;
 
@@ -16,7 +17,7 @@ import java.util.Map;
 /** Protobuf with NIO and String city names */
 class Bench_Protobuf_NIO_String extends Benchmark {
     public Bench_Protobuf_NIO_String() throws IOException {
-        super(10_000_000);
+        super(BenchmarkParameters.itemCount);;
     }
 
     @Override
@@ -62,6 +63,8 @@ class Bench_Protobuf_NIO_String extends Benchmark {
 
         // read in a loop to let the VM and caches warm up
         for (int iter = 0; iter < 3; iter++) {
+            GcFinalization.awaitFullGc();
+
             long readStart = System.currentTimeMillis();
 
             Map<String, ResultsObserver> stats = new HashMap<>();

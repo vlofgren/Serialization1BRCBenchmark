@@ -1,5 +1,7 @@
 package benchmark;
 
+import com.google.common.testing.GcFinalization;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
@@ -10,7 +12,7 @@ import java.util.Arrays;
 
 public class Bench_CustomFileChannel_Ordinal extends Benchmark {
     public Bench_CustomFileChannel_Ordinal() throws IOException {
-        super(10_000_000);
+        super(BenchmarkParameters.itemCount);;
     }
 
     @Override
@@ -50,6 +52,7 @@ public class Bench_CustomFileChannel_Ordinal extends Benchmark {
 
         // read in a loop to let the VM and caches warm up
         for (int iter = 0; iter < 3; iter++) {
+            GcFinalization.awaitFullGc();
             long readStart = System.currentTimeMillis();
 
             ResultsObserver[] stats = new ResultsObserver[citiesAll.size()];

@@ -1,10 +1,14 @@
 package benchmark;
 
+import com.google.common.testing.GcFinalization;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Random;
+import java.util.function.IntSupplier;
+import java.util.function.ToIntFunction;
 
 public abstract class Benchmark {
     protected static List<String> citiesAll = List.of("helsinki", "tampere", "turku", "oulu", "vaasa", "pori", "jyväskylä", "mikkeli", "kouvola", "kotka",
@@ -20,7 +24,7 @@ public abstract class Benchmark {
             "budapest", "debrecen", "szeged", "miskolc", "pecs", "gyor", "nyiregyhaza", "kecskemet", "szekesfehervar", "szombathely");
     double[] avgs;
     double[] stddevs;
-    private Random random = new Random();
+    private final Random random = new Random();
 
     public static Path tempDirBase = Path.of("/tmp"); // may want to change this to a different directory if you're on tmpfs /tmp
 

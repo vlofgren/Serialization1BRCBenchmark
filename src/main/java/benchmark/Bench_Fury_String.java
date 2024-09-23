@@ -1,5 +1,6 @@
 package benchmark;
 
+import com.google.common.testing.GcFinalization;
 import org.apache.fury.Fury;
 import org.apache.fury.config.Language;
 import org.apache.fury.io.FuryInputStream;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 class Bench_Fury_String extends Benchmark {
     public Bench_Fury_String() throws IOException {
-        super(10_000_000);
+        super(BenchmarkParameters.itemCount);;
     }
 
     record Measurement(String city, int temperature) {}
@@ -41,7 +42,7 @@ class Bench_Fury_String extends Benchmark {
         long bestReadTime = Integer.MAX_VALUE;
         for (int iter = 0; iter < iters; iter++) {
             Map<String, ResultsObserver> resultsObserverMap = new HashMap<>();
-
+            GcFinalization.awaitFullGc();
             long readStart = System.currentTimeMillis();
 
             try (var furyInputStream = new FuryInputStream(Files.newInputStream(file))) {

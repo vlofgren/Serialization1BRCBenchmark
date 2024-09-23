@@ -34,11 +34,9 @@ dependencies {
     // fury
     implementation 'org.apache.fury:fury-core:0.7.1'
 
+    implementation group: 'com.google.guava', name: 'guava-testlib', version: '33.3.0-jre'
     implementation 'org.slf4j:slf4j-api:1.7.30'
     implementation 'org.slf4j:slf4j-simple:1.7.30'
-
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
 test {

@@ -1,5 +1,7 @@
 package benchmark;
 
+import com.google.common.testing.GcFinalization;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,7 +10,7 @@ import java.util.Map;
 
 class Bench_DataOutputStream_Interleaved extends Benchmark {
     public Bench_DataOutputStream_Interleaved() throws IOException {
-        super(10_000_000);
+        super(BenchmarkParameters.itemCount);;
     }
 
     @Override
@@ -33,6 +35,7 @@ class Bench_DataOutputStream_Interleaved extends Benchmark {
         int bestReadTime = Integer.MAX_VALUE;
 
         for (int iter = 0; iter < iters; iter++) {
+            GcFinalization.awaitFullGc();
             // read in a loop to let the VM and caches warm up
             long readStart = System.currentTimeMillis();
 

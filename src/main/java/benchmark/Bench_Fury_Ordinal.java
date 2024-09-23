@@ -1,5 +1,6 @@
 package benchmark;
 
+import com.google.common.testing.GcFinalization;
 import org.apache.fury.Fury;
 import org.apache.fury.config.Language;
 import org.apache.fury.io.FuryInputStream;
@@ -12,7 +13,7 @@ import java.util.Arrays;
 
 class Bench_Fury_Ordinal extends Benchmark {
     public Bench_Fury_Ordinal() throws IOException {
-        super(10_000_000);
+        super(BenchmarkParameters.itemCount);;
     }
 
     record Measurement(int city, int temperature) {}
@@ -41,6 +42,7 @@ class Bench_Fury_Ordinal extends Benchmark {
         for (int iter = 0; iter < iters; iter++) {
             ResultsObserver[] stats = new ResultsObserver[citiesAll.size()];
             Arrays.setAll(stats, i -> new ResultsObserver());
+            GcFinalization.awaitFullGc();
 
             long readStart = System.currentTimeMillis();
 

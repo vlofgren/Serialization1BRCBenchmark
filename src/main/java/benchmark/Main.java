@@ -30,7 +30,7 @@ public class Main {
         for (var benchmark : benchmarks) {
             System.err.println("Running " + benchmark.getName());
 
-            results.put(benchmark.getName(), benchmark.run(3));
+            results.put(benchmark.getName(), benchmark.run(BenchmarkParameters.iters));
         }
 
         System.out.println("*** Results ***");
