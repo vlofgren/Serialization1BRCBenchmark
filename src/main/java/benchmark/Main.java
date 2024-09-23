@@ -21,8 +21,8 @@ public class Main {
                 new Bench_Protobuf_NIO_String(),
                 new Bench_Protobuf_NIO_Ordinal(),
                 new Bench_Protobuf_NIO_Ordinal32k(), // hn comment asserted 4k is too small a buffer
-                new BenchRAM_CityOrdinals(),
-                new BenchRAM_CityStrings()
+                new Bench_RAM_CityOrdinals(),
+                new Bench_RAM_CityStrings()
         );
 
         Map<String, Benchmark.BenchmarkResult> results = new HashMap<>();
