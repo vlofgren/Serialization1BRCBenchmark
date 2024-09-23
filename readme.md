@@ -19,6 +19,7 @@ Gotchas:
 
 Here is a reference output:
 
+```
 BenchRAM_CityOrdinals: BenchmarkResult[timeS=2.73, sizeGb=0.0]
 Bench_CustomFileChannel_Ordinal: BenchmarkResult[timeS=6.91, sizeGb=2.8]
 BenchRAM_CityStrings: BenchmarkResult[timeS=12.34, sizeGb=0.0]
@@ -34,3 +35,4 @@ Bench_Protobuf_InputStream_Ordinal: BenchmarkResult[timeS=528.78, sizeGb=7.4]
 Bench_Protobuf_InputStream_String: BenchmarkResult[timeS=565.53, sizeGb=12.4]
 Bench_Fury_Ordinal: BenchmarkResult[timeS=772.35, sizeGb=4.1]
 Bench_Fury_String: BenchmarkResult[timeS=787.56, sizeGb=11.4]
+```
