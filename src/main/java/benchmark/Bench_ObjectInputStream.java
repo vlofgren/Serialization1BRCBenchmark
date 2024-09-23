@@ -8,24 +8,22 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-class Bench_DataOutputStream_Columnar extends Benchmark {
-    public Bench_DataOutputStream_Columnar() throws IOException {
+class Bench_ObjectInputStream extends Benchmark {
+    public Bench_ObjectInputStream() throws IOException {
         super(BenchmarkParameters.itemCount);;
     }
 
     @Override
     protected int runBenchmark(int iters) throws IOException {
-        Path citiesFile = Files.createTempFile(tempDir, "cities", ".bin");
-        Path temperaturesFile = Files.createTempFile(tempDir, "temperatures", ".bin");
+        Path file = Files.createTempFile(tempDir, "cities", ".bin");
 
         long writeStart = System.currentTimeMillis();
 
-        try (var citiesDos = new DataOutputStream(new BufferedOutputStream(Files.newOutputStream(citiesFile)));
-             var temperaturesDos = new DataOutputStream(new BufferedOutputStream(Files.newOutputStream(temperaturesFile)))) {
+        try (var stream = new ObjectOutputStream(new BufferedOutputStream(Files.newOutputStream(file)))) {
             for (int i = 0; i < itemCount; i++) {
                 var measurement = nextMeasurement();
-                citiesDos.writeUTF(measurement.city());
-                temperaturesDos.writeShort(measurement.shortValue());
+
+                stream.writeObject(new JavaSerializableMeasurement(measurement.city(), measurement.shortValue()));
             }
         }
 
@@ -36,21 +34,26 @@ class Bench_DataOutputStream_Columnar extends Benchmark {
         int bestReadTime = Integer.MAX_VALUE;
 
         for (int iter = 0; iter < iters; iter++) {
-            GcFinalization.awaitFullGc();
             // read in a loop to let the VM and caches warm up
+            GcFinalization.awaitFullGc();
             long readStart = System.currentTimeMillis();
 
             Map<String, ResultsObserver> resultsObserverMap = new HashMap<>();
 
-            try (var citiesDis = new DataInputStream(new BufferedInputStream(Files.newInputStream(citiesFile)));
-                 var temperaturesDis = new DataInputStream(new BufferedInputStream(Files.newInputStream(temperaturesFile)))) {
+            try (var stream = new ObjectInputStream(new BufferedInputStream(Files.newInputStream(file)))) {
 
                 while (true) {
-                    int temperature = temperaturesDis.readShort();
-                    resultsObserverMap.computeIfAbsent(citiesDis.readUTF(), k -> new ResultsObserver()).observe(temperature / 100.);
+                    if (stream.readObject() instanceof JavaSerializableMeasurement obj) {
+                        resultsObserverMap.computeIfAbsent(obj.city, k -> new ResultsObserver()).observe(obj.temperature / 100.);
+                    }
+                    else {
+                        throw new IllegalStateException("Bad data");
+                    }
                 }
-            } catch (EOFException ex) {
-            } // ignore
+            } catch (EOFException ex) {} // ignore
+            catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
 
             resultsObserverMap.forEach((city, observer) -> {
                 System.out.println(city + " " + observer);
@@ -62,4 +65,6 @@ class Bench_DataOutputStream_Columnar extends Benchmark {
         System.out.println("Best read time: " + bestReadTime + " ms");
         return bestReadTime;
     }
+
+    record JavaSerializableMeasurement(String city, int temperature) implements Serializable { }
 }

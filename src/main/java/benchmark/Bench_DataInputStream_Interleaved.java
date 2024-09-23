@@ -8,8 +8,8 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
-class Bench_DataOutputStream_Interleaved extends Benchmark {
-    public Bench_DataOutputStream_Interleaved() throws IOException {
+class Bench_DataInputStream_Interleaved extends Benchmark {
+    public Bench_DataInputStream_Interleaved() throws IOException {
         super(BenchmarkParameters.itemCount);;
     }
 
