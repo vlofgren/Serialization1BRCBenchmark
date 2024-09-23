@@ -20,7 +20,7 @@ public class Bench_CustomFileChannel_Strings32k extends Benchmark {
     protected int runBenchmark(int iters) throws IOException {
         Path tempFile = Files.createTempFile(tempDir, "cities", ".bin");
 
-        ByteBuffer buffer = ByteBuffer.allocate(32*1024);
+        ByteBuffer buffer = ByteBuffer.allocate(32*1024*1024);
         long writeStart = System.currentTimeMillis();
 
 

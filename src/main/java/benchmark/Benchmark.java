@@ -26,7 +26,7 @@ public abstract class Benchmark {
     double[] stddevs;
     private final Random random = new Random();
 
-    public static Path tempDirBase = Path.of("/tmp"); // may want to change this to a different directory if you're on tmpfs /tmp
+    public static Path tempDirBase = Path.of("/mnt/p/storage2/tmp/"); // may want to change this to a different directory if you're on tmpfs /tmp
 
     protected final int itemCount;
     protected final Path tempDir;
