@@ -24,6 +24,7 @@ class Bench_ObjectInputStream extends Benchmark {
                 var measurement = nextMeasurement();
 
                 stream.writeObject(new JavaSerializableMeasurement(measurement.city(), measurement.shortValue()));
+                stream.reset(); // to avoid keeping references to all objects in memory
             }
         }
 
@@ -41,7 +42,6 @@ class Bench_ObjectInputStream extends Benchmark {
             Map<String, ResultsObserver> resultsObserverMap = new HashMap<>();
 
             try (var stream = new ObjectInputStream(new BufferedInputStream(Files.newInputStream(file)))) {
-
                 while (true) {
                     if (stream.readObject() instanceof JavaSerializableMeasurement obj) {
                         resultsObserverMap.computeIfAbsent(obj.city, k -> new ResultsObserver()).observe(obj.temperature / 100.);
