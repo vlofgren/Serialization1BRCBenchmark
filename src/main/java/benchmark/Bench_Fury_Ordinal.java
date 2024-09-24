@@ -24,7 +24,10 @@ class Bench_Fury_Ordinal extends Benchmark {
 
         long writeStart = System.currentTimeMillis();
 
-        Fury fury = Fury.builder().withLanguage(Language.JAVA).build();
+        Fury fury = Fury.builder()
+                .withLanguage(Language.JAVA)
+                .withRefTracking(false)
+                .build();
         fury.register(Measurement.class);
 
         try (var dataStream = new BufferedOutputStream(Files.newOutputStream(file))) {
